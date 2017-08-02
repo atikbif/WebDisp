@@ -21,10 +21,33 @@
 
     {% endif %}
 
-    <div class="jumbotron text-center">
-    <h1>Страница в разработке!</h1>
-    {% if session['email'] %}
-    <p> Hello {{session['email']}} </p>
-    {% endif %}
-</div>
+    <div class="container">
+    
+    <h2>Список объектов</h2>
+
+    
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th>Комментарий</th>
+        <th>Последнее обновление</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ob in objects %}
+        <tr>
+        
+          <td><a href={{ url_for('object_state.state') }} class="btn btn-link" role="button">{{ob.name}}</a></td>
+          <td>{{ob.comment}}</td>
+          <td> 
+            {%if ob.upd_time %} {{ob.upd_time}}  {%else%} нет данных {% endif %}
+            
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+    </div>
+    
 {% endblock %}
