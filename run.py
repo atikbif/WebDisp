@@ -4,7 +4,7 @@ from project import app
 from project import db
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from flask.ext.bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
 
 migrate = Migrate(app, db)
 

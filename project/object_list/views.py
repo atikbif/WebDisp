@@ -3,6 +3,7 @@
 #################
  
 from flask import render_template, Blueprint
+from flask_login import login_required
  
  
 ################
@@ -17,5 +18,6 @@ object_list_blueprint = Blueprint('object_list', __name__, template_folder='temp
 ################
  
 @object_list_blueprint.route('/list')
+@login_required
 def obj_list():
     return render_template('obj_list.html')
