@@ -1,5 +1,10 @@
 {% extends "bootstrap/base.html" %}
 
+{% block head %}
+{{super()}}
+   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}"
+{% endblock %}
+
 {% block title %} Список объектов {% endblock %}
 
 {% block content %}
@@ -38,10 +43,10 @@
       {% for ob in objects %}
         <tr>
         
-          <td><a href={{ url_for('object_state.state') }} class="btn btn-link" role="button">{{ob.name}}</a></td>
+          <td><a href={{ url_for('object_state.state',id=ob.id) }} class="btn btn-link" role="button">{{ob.name}}</a></td>
           <td>{{ob.comment}}</td>
           <td> 
-            {%if ob.upd_time %} {{ob.upd_time}}  {%else%} нет данных {% endif %}
+            {%if ob.input_data[0].upd_time %} {{ob.input_data[0].upd_time}}  {%else%} нет данных {% endif %}
             
           </td>
         </tr>

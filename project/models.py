@@ -49,13 +49,98 @@ class ObjDef(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    comment = db.Column(db.String(100), nullable=False)
-    upd_time = db.Column(db.DateTime, nullable=True)
+    comment = db.Column(db.String(100))
+    discr_count = db.Column(db.Integer)
+    discretes = db.relationship('DiscrDef',backref='parent_object',lazy=True)
+    analog_count = db.Column(db.Integer)
+    analogs = db.relationship('AnalogDef',backref='parent_object',lazy=True)
+    message_count = db.Column(db.Integer)
+    messages = db.relationship('MessageDef',backref='parent_object',lazy=True)
     
-    def __init__(self, name,comment,upd_time):
+    
+    def __init__(self, name,comment,discr_count,analog_count,message_count):
         self.name = name
         self.comment = comment
-        self.upd_time = upd_time
+        self.discr_count = discr_count
+        self.analog_count = analog_count
+        self.message_count = message_count
     
     def __repr__(self):
         return '<Name %r>' % self.name
+    
+class InpData(db.Model):
+    
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.LargeBinary(500))
+    upd_time = db.Column(db.DateTime)
+    obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
+    parent_object = db.relationship('ObjDef',backref='input_data')
+    
+    def __init__(self,data,upd_time,obj):
+        self.data = data
+        self.upd_time = upd_time
+        self.obj_id = obj.id
+        
+    def __repr__(self):
+        return '<Data %r>' %self.data
+    
+class DiscrDef(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100),nullable=False)
+    comment = db.Column(db.String(100))
+    offset = db.Column(db.Integer)
+    obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
+    
+    def __init__(self,name,comment,offset,obj):
+        self.name = name
+        self.comment = comment
+        self.offset = offset
+        self.obj_id = obj.id
+        
+    def __repr__(self):
+        return '<Name %r>' %self.name
+    
+class AnalogDef(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100),nullable=False)
+    comment = db.Column(db.String(100))
+    measure = db.Column(db.String(50))
+    offset = db.Column(db.Integer)
+    sign = db.Column(db.Boolean)
+    coeff = db.Column(db.Float)
+    obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
+    
+    def __init__(self,name,comment,measure,offset,sign,coeff,obj):
+        self.name = name
+        self.comment = comment
+        self.measure = measure
+        self.offset = offset
+        self.sign = sign
+        self.coeff = coeff
+        self.obj_id = obj.id
+    
+    def __repr__(self):
+        return '<Name> %r' %self.name
+
+class MessageDef(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    message = db.Column(db.String(200),nullable=False)
+    alarm_level = db.Column(db.Integer)
+    offset = db.Column(db.Integer)
+    obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
+    
+    def __init__(self,message,offset,obj,alarm_level=0):
+        self.message = message
+        self.offset = offset
+        self.alarm_level = alarm_level
+        self.obj_id = obj.id
+        
+    def __repr__(self):
+        return '<Message> %r' %self.message
+        
+    
+
+    
+
+
+

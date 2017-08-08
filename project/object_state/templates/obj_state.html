@@ -1,5 +1,10 @@
 {% extends "bootstrap/base.html" %}
 
+{% block head %}
+{{super()}}
+   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}"
+{% endblock %}
+
 {% block title %} Состояние объекта {% endblock %}
 
 {% block content %}
@@ -8,7 +13,7 @@
       <div class="container-fluid">
         <div class="navbar-header">
           
-          <span class="navbar-brand">{{session['email']}}</span>
+          <span class="navbar-brand">{{obj_var.name}} (последний опрос: {{obj_var.upd_time}})</span>
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li><a href={{ url_for('object_list.obj_list') }}><span class="glyphicon glyphicon-list-alt"></span> Объекты</a></li>
@@ -17,7 +22,74 @@
       </div>
     </nav>
 
-    <div class="jumbotron text-center">
-    <h1>Страница в разработке</h1>
-</div>
+    <div class="container">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#di">Дискр. сигналы</a></li>
+          <li><a data-toggle="tab" href="#ai">Аналог. сигналы</a></li>
+          <li><a data-toggle="tab" href="#mess">Сообщения</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="di" class="tab-pane fade in active">
+              <p></p>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Комментарий</th>
+                    <th>Состояние</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for di_var in obj_var.discr %}
+                  <tr>
+                    <td>{{di_var[0]}}</td>
+                    <td>{{di_var[1]}}</td>
+                    <td>{{di_var[2]}}</td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            
+              </table>
+            </div>
+            <div id="ai" class="tab-pane fade">
+              <p></p>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Комментарий</th>
+                    <th>Значение</th>
+                    <th>Ед. измер.</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for ai_var in obj_var.analog %}
+                  <tr>
+                    <td>{{ai_var[0]}}</td>
+                    <td>{{ai_var[1]}}</td>
+                    <td>{{"{:.3f}".format(ai_var[3])}}</td>
+                    <td>{{ai_var[2]}}</td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+              </table>
+            </div>
+            <div id="mess" class="tab-pane fade">
+              <p></p>
+              {% for ms_var in obj_var.messages %}
+                  {% if ms_var[1]==0 %}
+                      <div class="alert alert-info">
+                  {% endif %}
+                  {% if ms_var[1]==1 %}
+                      <div class="alert alert-warning">
+                  {% endif %}
+                  {% if ms_var[1]==2 %}
+                      <div class="alert alert-danger">
+                  {% endif %}
+                  {{ms_var[0]}}
+                  </div>
+              {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
