@@ -2,11 +2,16 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_moment import Moment 
+from flask_mqtt import Mqtt
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('flask.cfg')
 
 db = SQLAlchemy(app)
+
+mqtt = Mqtt(app)
+
+import project.mqtt
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -20,6 +25,7 @@ from project.models import User
 def load_user(user_id):
     return User.query.filter(User.id == int(user_id)).first()
 
+
 ####################
 #### blueprints ####
 ####################
@@ -32,5 +38,3 @@ from project.object_state.views import object_state_blueprint
 app.register_blueprint(users_blueprint)
 app.register_blueprint(object_list_blueprint)
 app.register_blueprint(object_state_blueprint)
-
-

@@ -2,7 +2,7 @@
 #### imports ####
 #################
  
-from flask import render_template, Blueprint,session,abort
+from flask import render_template, Blueprint,session,abort,jsonify
 from flask_login import login_required
 from project.models import ObjDef
 from .obj_state import ObjState
@@ -34,7 +34,7 @@ def state(id):
         ais = ob.analogs
         dt = ob.input_data[0]
         mss = ob.messages
-        obs = ObjState(name=ob.name,comment=ob.comment,upd_time=dt.upd_time)
+        obs = ObjState(name=ob.name,comment=ob.comment,upd_time=dt.upd_time,id=id)
         for di in dis:
             value = dt.data[di.offset]
             obs.add_discr(di.name,di.comment,value)
@@ -46,4 +46,49 @@ def state(id):
             if value:
                 obs.add_message(ms.message,ms.alarm_level)
         return render_template('obj_state.html',obj_var = obs)
+    return abort(404)
+
+@object_state_blueprint.route('/obj_info/<int:id>')
+@login_required
+def info(id):
+    ob = ObjDef.query.filter_by(id = id).first()
+    if ob is None:
+        return abort(404)
+    user_check = False
+    for user in ob.users:
+        if session['email']==user.email:
+            user_check = True
+    if user_check:
+        di_values=list()
+        ai_values = list()
+        alarms = list()
+        warnings = list()
+        infos = list()
+        for di in ob.discretes:
+            di_values.append(ob.input_data[0].data[di.offset])
+        for ai in ob.analogs:
+            value = (ob.input_data[0].data[ai.offset]*256 + ob.input_data[0].data[ai.offset+1])
+            if ai.sign and value>32767:
+                value=(65536-value)*-1
+            value = value * ai.coeff
+            ai_values.append(value)
+        for ms in ob.messages:
+            value = ob.input_data[0].data[ms.offset]
+            if value:
+                if ms.alarm_level == 2:
+                    alarms.append(ms.message)
+                if ms.alarm_level == 1:
+                    warnings.append(ms.message)
+                if ms.alarm_level == 0:
+                    infos.append(ms.message)
+        info = {
+            "di" : di_values,
+            "ai" : ai_values,
+            "alarm" : alarms,
+            "warning" : warnings,
+            "info" : infos,
+            "time" : ob.input_data[0].upd_time.strftime("%d %m %Y   %H:%M:%S") 
+        }
+
+        return jsonify(info)
     return abort(404)

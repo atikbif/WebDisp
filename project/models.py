@@ -71,12 +71,14 @@ class ObjDef(db.Model):
 class InpData(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
+    topic = db.Column(db.String(100))
     data = db.Column(db.LargeBinary(500))
     upd_time = db.Column(db.DateTime)
     obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
     parent_object = db.relationship('ObjDef',backref='input_data')
     
-    def __init__(self,data,upd_time,obj):
+    def __init__(self,topic,data,upd_time,obj):
+        self.topic = topic
         self.data = data
         self.upd_time = upd_time
         self.obj_id = obj.id

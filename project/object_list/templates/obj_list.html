@@ -7,6 +7,10 @@
 
 {% block title %} Список объектов {% endblock %}
 
+{% block body_attribs %}
+    onload='init_update();'
+{% endblock %}
+
 {% block content %}
 
     {% if session['email'] %}
@@ -45,7 +49,7 @@
         
           <td><a href={{ url_for('object_state.state',id=ob.id) }} class="btn btn-link" role="button">{{ob.name}}</a></td>
           <td>{{ob.comment}}</td>
-          <td> 
+          <td id="upd_time{{objects.index(ob)}}"> 
             {%if ob.input_data[0].upd_time %} {{ob.input_data[0].upd_time}}  {%else%} нет данных {% endif %}
             
           </td>
@@ -54,5 +58,38 @@
     </tbody>
     </table>
     </div>
+    
+    <script>
+    
+        var ajax_get = function(url, callback) {
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    try {
+                        var data = JSON.parse(xmlhttp.responseText);
+                    } catch(err) {
+                        return;
+                    }
+                    callback(data);
+                }
+            };
+     
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        };
+    
+        function loadTime() {
+            ajax_get('/list_upd?r=' + Math.random(), function(data) {
+                for (i = 0; i < data.upd_time.length; i++) {
+                    document.getElementById('upd_time' + i.toString()).innerHTML = data.upd_time[i];
+                }
+            });
+        }
+    
+        function init_update() {
+            loadTime();
+            setInterval(loadTime, 2000);
+        }
+    </script>
     
 {% endblock %}

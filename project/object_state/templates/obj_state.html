@@ -7,13 +7,17 @@
 
 {% block title %} Состояние объекта {% endblock %}
 
+{% block body_attribs %}
+    onload='init();'
+{% endblock %}
+
 {% block content %}
 
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
           
-          <span class="navbar-brand">{{obj_var.name}} (последний опрос: {{obj_var.upd_time}})</span>
+          <span class="navbar-brand">{{obj_var.name}} (последний опрос: <span id="cur_time">{{obj_var.upd_time}}</span>)</span>
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li><a href={{ url_for('object_list.obj_list') }}><span class="glyphicon glyphicon-list-alt"></span> Объекты</a></li>
@@ -44,7 +48,7 @@
                   <tr>
                     <td>{{di_var[0]}}</td>
                     <td>{{di_var[1]}}</td>
-                    <td>{{di_var[2]}}</td>
+                    <td id="di{{obj_var.discr.index(di_var)}}">{{di_var[2]}}</td>
                   </tr>
               {% endfor %}
               </tbody>
@@ -67,7 +71,7 @@
                   <tr>
                     <td>{{ai_var[0]}}</td>
                     <td>{{ai_var[1]}}</td>
-                    <td>{{"{:.3f}".format(ai_var[3])}}</td>
+                    <td id="ai{{obj_var.analog.index(ai_var)}}">{{"{:.3f}".format(ai_var[3])}}</td>
                     <td>{{ai_var[2]}}</td>
                   </tr>
               {% endfor %}
@@ -75,7 +79,6 @@
               </table>
             </div>
             <div id="mess" class="tab-pane fade">
-              <p></p>
               {% for ms_var in obj_var.messages %}
                   {% if ms_var[1]==0 %}
                       <div class="alert alert-info">
@@ -92,4 +95,56 @@
             </div>
         </div>
     </div>
+    <script>
+        var ajax_get = function(url, callback) {
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    try {
+                        var data = JSON.parse(xmlhttp.responseText);
+                    } catch(err) {
+                        return;
+                    }
+                    callback(data);
+                }
+            };
+     
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        };
+    
+        function loadData() {
+            ajax_get('/obj_info/{{obj_var.id}}?r=' + Math.random(), function(data) {
+                for (i = 0; i < data.di.length; i++) {
+                    document.getElementById('di' + i.toString()).innerHTML = data.di[i];
+                }
+                for (i = 0; i < data.ai.length; i++) {
+                    document.getElementById('ai' + i.toString()).innerHTML = data.ai[i].toFixed(3);
+                }
+                ms_str="<p></p>";
+                for(i=0;i<data.alarm.length;i++) {
+                    ms_str+='<div class="alert alert-danger">';
+                    ms_str+=data.alarm[i];
+                    ms_str+='</div>';
+                }
+                for(i=0;i<data.warning.length;i++) {
+                    ms_str+='<div class="alert alert-warning">';
+                    ms_str+=data.warning[i];
+                    ms_str+='</div>';
+                }
+                for(i=0;i<data.info.length;i++) {
+                    ms_str+='<div class="alert alert-info">';
+                    ms_str+=data.info[i];
+                    ms_str+='</div>';
+                }
+                document.getElementById('mess').innerHTML = ms_str;
+                document.getElementById('cur_time').innerHTML = data.time;
+            });
+        }
+    
+        function init() {
+            loadData();
+            setInterval(loadData, 2000);
+        }
+    </script>
 {% endblock %}

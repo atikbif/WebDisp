@@ -1,11 +1,12 @@
 class ObjState:
-    def __init__(self,name,comment,upd_time):
+    def __init__(self,name,comment,upd_time,id):
         self.discr = list()
         self.analog = list()
         self.messages = list()
         self.name = name
         self.comment = comment
         self.upd_time = upd_time
+        self.id = id
         
     def add_discr(self,name,comment,state):
         di_state = name,comment,state

@@ -64,13 +64,13 @@ for us in object2.users:
 print()
 
 inp1 = (0x01,0x00,0x00,0x01,0x01,0x01,0x23,0x00,0x45,0x00,0x10,0x01,0x01,0x00,0x23,0x00,0x01,0x01,0x00,0x01)    
-data1 = InpData(inp1,datetime.utcnow(),object1)
+data1 = InpData("4385017381/all",inp1,datetime.utcnow(),object1)
 
 inp2 = (0x00,0x01,0x00,0x00,0x01,0x00,0x23,0x00,0x05,0x01,0x00,0x00,0x31,0x00,0x03,0x01,0x01,0x00,0x01,0x01)    
-data2 = InpData(inp2,datetime.utcnow(),object2)
+data2 = InpData("8495062739/all",inp2,datetime.utcnow(),object2)
 
 inp3 = (0x01,0x01,0x01,0x00,0x00,0x00,0x56,0x00,0x85,0x01,0x40,0x60,0x38,0x00,0xA3,0x00,0x00,0x00,0x01,0x00)    
-data3 = InpData(inp3,datetime.utcnow(),object3)
+data3 = InpData("0475629826/all",inp3,datetime.utcnow(),object3)
     
 db.session.add(data1)
 db.session.commit()
@@ -126,7 +126,7 @@ db.session.add(discr_3_5)
 
 db.session.commit()
 
-an_1_1 = AnalogDef(name='T помещения', comment='',measure='град',sign=False,coeff=0.1,offset=5,obj=object1)
+an_1_1 = AnalogDef(name='T помещения', comment='',measure='град',sign=True,coeff=0.1,offset=5,obj=object1)
 db.session.add(an_1_1)
 an_1_2 = AnalogDef(name='T нар', comment='',measure='град',sign=True,coeff=0.1,offset=7,obj=object1)
 db.session.add(an_1_2)
@@ -152,15 +152,15 @@ db.session.add(an_2_5)
     
 db.session.commit()
 
-an_3_1 = AnalogDef(name='T1', comment='температура зона 1',measure='подвал',sign=True,coeff=0.1,offset=5,obj=object3)
+an_3_1 = AnalogDef(name='T1', comment='температура зона 1',measure='град',sign=True,coeff=0.1,offset=5,obj=object3)
 db.session.add(an_3_1)
-an_3_2 = AnalogDef(name='T2', comment='температура зона 2',measure='гараж',sign=True,coeff=0.1,offset=7,obj=object3)
+an_3_2 = AnalogDef(name='T2', comment='температура зона 2',measure='град',sign=True,coeff=0.1,offset=7,obj=object3)
 db.session.add(an_3_2)
-an_3_3 = AnalogDef(name='T3', comment='температура зона 3',measure='стоянка',sign=True,coeff=0.1,offset=9,obj=object3)
+an_3_3 = AnalogDef(name='T3', comment='температура зона 3',measure='град',sign=True,coeff=0.1,offset=9,obj=object3)
 db.session.add(an_3_3)
-an_3_4 = AnalogDef(name='T4', comment='температура зона 4',measure='проходная',sign=True,coeff=0.1,offset=11,obj=object3)
+an_3_4 = AnalogDef(name='T4', comment='температура зона 4',measure='град',sign=True,coeff=0.1,offset=11,obj=object3)
 db.session.add(an_3_4)
-an_3_5 = AnalogDef(name='T5', comment='температура зона 5',measure='склад',sign=True,coeff=0.1,offset=13,obj=object3)
+an_3_5 = AnalogDef(name='T5', comment='температура зона 5',measure='град',sign=True,coeff=0.1,offset=13,obj=object3)
 db.session.add(an_3_5)
     
 db.session.commit()
