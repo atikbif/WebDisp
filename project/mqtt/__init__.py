@@ -1,8 +1,10 @@
-from project import mqtt
+from project import app
 from project import db
 from project.models import InpData
 from datetime import datetime
+from flask_mqtt import Mqtt
 
+mqtt = Mqtt(app)
 
 inputs = InpData.query.all()
 for inp in inputs:
@@ -37,7 +39,6 @@ def handle_mqtt_message(client, userdata, message):
                         top_data.append(1)
                     else:
                         top_data.append(0)
-                #print(top_data)
                 inp.data = tuple(top_data)
-                inp.upd_time = datetime.utcnow()
+                inp.upd_time = datetime.now()
                 db.session.commit()

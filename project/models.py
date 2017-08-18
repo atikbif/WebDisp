@@ -56,14 +56,16 @@ class ObjDef(db.Model):
     analogs = db.relationship('AnalogDef',backref='parent_object',lazy=True)
     message_count = db.Column(db.Integer)
     messages = db.relationship('MessageDef',backref='parent_object',lazy=True)
+    enable = db.Column(db.Boolean)
     
     
-    def __init__(self, name,comment,discr_count,analog_count,message_count):
+    def __init__(self, name,comment,discr_count,analog_count,message_count,enable=True):
         self.name = name
         self.comment = comment
         self.discr_count = discr_count
         self.analog_count = analog_count
         self.message_count = message_count
+        self.enable = enable
     
     def __repr__(self):
         return '<Name %r>' % self.name
@@ -91,12 +93,15 @@ class DiscrDef(db.Model):
     name = db.Column(db.String(100),nullable=False)
     comment = db.Column(db.String(100))
     offset = db.Column(db.Integer)
+    enable = db.Column(db.Boolean)
     obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
     
-    def __init__(self,name,comment,offset,obj):
+    
+    def __init__(self,name,comment,offset,obj,enable=True):
         self.name = name
         self.comment = comment
         self.offset = offset
+        self.enable = enable
         self.obj_id = obj.id
         
     def __repr__(self):
@@ -110,15 +115,17 @@ class AnalogDef(db.Model):
     offset = db.Column(db.Integer)
     sign = db.Column(db.Boolean)
     coeff = db.Column(db.Float)
+    enable = db.Column(db.Boolean)
     obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
     
-    def __init__(self,name,comment,measure,offset,sign,coeff,obj):
+    def __init__(self,name,comment,measure,offset,sign,coeff,obj,enable=True):
         self.name = name
         self.comment = comment
         self.measure = measure
         self.offset = offset
         self.sign = sign
         self.coeff = coeff
+        self.enable = enable
         self.obj_id = obj.id
     
     def __repr__(self):
@@ -129,12 +136,14 @@ class MessageDef(db.Model):
     message = db.Column(db.String(200),nullable=False)
     alarm_level = db.Column(db.Integer)
     offset = db.Column(db.Integer)
+    enable = db.Column(db.Boolean)
     obj_id = db.Column(db.Integer, db.ForeignKey('objects.id'),nullable=False)
     
-    def __init__(self,message,offset,obj,alarm_level=0):
+    def __init__(self,message,offset,obj,alarm_level=0,enable=True):
         self.message = message
         self.offset = offset
         self.alarm_level = alarm_level
+        self.enable = enable
         self.obj_id = obj.id
         
     def __repr__(self):

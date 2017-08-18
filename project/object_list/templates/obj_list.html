@@ -45,6 +45,7 @@
     </thead>
     <tbody>
       {% for ob in objects %}
+      {% if ob.enable %}
         <tr>
         
           <td><a href={{ url_for('object_state.state',id=ob.id) }} class="btn btn-link" role="button">{{ob.name}}</a></td>
@@ -54,6 +55,7 @@
             
           </td>
         </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
     </table>

@@ -2,16 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_moment import Moment 
-from flask_mqtt import Mqtt
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('flask.cfg')
 
 db = SQLAlchemy(app)
-
-mqtt = Mqtt(app)
-
-import project.mqtt
 
 login_manager = LoginManager()
 login_manager.init_app(app)

@@ -34,7 +34,11 @@ def obj_upd_time():
         objects = user.objects
         times = list()
         for ob in objects:
-            times.append(ob.input_data[0].upd_time.strftime("%d %m %Y   %H:%M:%S"))
+            if ob.enable:
+                if(ob.input_data[0].upd_time) is not None:
+                    times.append(ob.input_data[0].upd_time.strftime("%d-%m-%Y   %H:%M:%S"))
+                else:
+                    times.append("Нет данных")
         info = {
             "upd_time": times
         }

@@ -1,0 +1,80 @@
+{
+    "users":[ 
+        {"email":"kontel@mail.ru","password":"admin"}, 
+        {"email":"guest@mail.ru","password":"guest"} 
+    ],
+    "objects": [
+        {
+            "name":"Тестовый объект 1",
+            "comment":"школа",
+            "enable":"1",
+            "discr":[
+                {"name":"CH4","comment":"Превышение порога загазованности","enable":"0"},
+                {"name":"Пожар","comment":"Пожар в котельной","enable":"1"},
+                {"name":"Фаза","comment":"Электропитание котельной","enable":"1"},
+                {"name":"Газовый клапан","comment":"-","enable":"1"},
+                {"name":"Взлом","comment":"Проникновение в котельную","enable":"0"},
+                {"name":"Ручной режим","comment":"-","enable":"1"}
+            ],
+            "regs":[
+                {"name":"T1","comment":"Температура в зоне 1","meas":"град","sign":"1","coeff":"0.1","enable":"1"},
+                {"name":"T2","comment":"Температура в зоне 2","meas":"град","sign":"1","coeff":"0.1","enable":"1"},
+                {"name":"T3","comment":"Температура в зоне 3","meas":"град","sign":"1","coeff":"0.1","enable":"0"},
+                {"name":"T4","comment":"Температура в зоне 4","meas":"град","sign":"1","coeff":"0.1","enable":"1"}
+            ],
+            "messages":[
+                {"name":"Загазованность","alarm":"2","enable":"1"},
+                {"name":"Пожар","alarm":"2","enable":"1"},
+                {"name":"Отключение электропитания","alarm":"2","enable":"1"},
+                {"name":"Газовый клапан","alarm":"2","enable":"1"},
+                {"name":"Проникновение в котельную","alarm":"1","enable":"1"},
+                {"name":"Котельная в ручном режиме","alarm":"0","enable":"1"}
+            ],
+            "users":["kontel@mail.ru","guest@mail.ru"],
+            "topic":"4385017381/all"
+        },
+        {
+            "name":"Тестовый объект 2",
+            "comment":"больница",
+            "enable":"0",
+            "discr":[
+                {"name":"Сигнал 1","comment":"-","enable":"1"},
+                {"name":"Сигнал 2","comment":"-","enable":"1"},
+                {"name":"Сигнал 3","comment":"-","enable":"1"},
+                {"name":"Сигнал 4","comment":"-","enable":"1"},
+                {"name":"Сигнал 5","comment":"-","enable":"1"}
+            ],
+            "regs":[
+                {"name":"T1","comment":"Температура котла 1","meas":"град","sign":"0","coeff":"0.1","enable":"1"},
+                {"name":"T2","comment":"Температура котла 2","meas":"град","sign":"0","coeff":"0.1","enable":"1"},
+                {"name":"T3","comment":"Температура котла 3","meas":"град","sign":"0","coeff":"0.1","enable":"1"}
+            ],
+            "messages":[
+                {"name":"Проникновение в зону 1","alarm":"0","enable":"1"},
+                {"name":"Проникновение в зону 2","alarm":"0","enable":"1"},
+                {"name":"Проникновение в зону 3","alarm":"1","enable":"1"},
+                {"name":"Проникновение в зону 4","alarm":"1","enable":"1"},
+                {"name":"Проникновение в зону 5","alarm":"2","enable":"1"},
+                {"name":"Проникновение в зону 6","alarm":"2","enable":"1"}
+            ],
+            "users":["kontel@mail.ru"],
+            "topic":"8495062739/all"
+        },
+        {
+            "name":"Тестовый объект 3",
+            "comment":"детский сад",
+            "enable":"0",
+            "discr":[
+                {"name":"Сигнал 1","comment":"-","enable":"0"}
+            ],
+            "regs":[
+                {"name":"Параметр 1","comment":"-","meas":"-","sign":"0","coeff":"1","enable":"0"}
+            ],
+            "messages":[
+                {"name":"Сообщение","alarm":"0","enable":"0"}
+            ],
+            "users":["kontel@mail.ru","guest@mail.ru"],
+            "topic":"topic_name"
+        }
+    ]
+}
